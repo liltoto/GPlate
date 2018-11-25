@@ -7,9 +7,9 @@
     "clean": "rm -rf node_modules",
     "build": "babel ./src -d ./lib",
     "prepublishOnly": "npm run clean && npm install && npm run build",
-    "publish-fix": "npm version patch && npm publish",
-    "publish-feature": "npm version minor && npm publish",
-    "publish-breakable": "npm version major && npm publish"
+    "publish-fix": "npm version patch && npm publish --access public ",
+    "publish-feature": "npm version minor && npm publish --access public ",
+    "publish-breakable": "npm version major && npm publish --access public "
   },
   "keywords": [],
   "author": "Güner Yildirim",
