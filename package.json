@@ -1,9 +1,10 @@
 {
   "name": "gplate",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf node_modules",
     "build": "babel ./src -d ./lib",
     "prepublishOnly": "npm run clean && npm install && npm run build",
     "publish-fix": "npm version patch && npm publish",

@@ -1,0 +1,8 @@
+/node_modules/**/*
+/lib/**/*
+.git/**/*
+.idea/
+.vscode/
+.cds
+/src
+*.DS_Store
