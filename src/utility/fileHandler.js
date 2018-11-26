@@ -35,16 +35,18 @@ module.exports.createFiles = (files, config) => {
   const name = realPath.split(path.sep).pop()
   const view = Object.assign({name}, ...config.options)
   return files.map(file => {
-    const filename = path.basename(file.output)
-    const input = fs.readFileSync(path.join(process.cwd(), file.input), 'utf8')
-    const output = handlebars.compile(input)(view)
-    return {
-      path: realPath,
-      name: filename,
-      options: config.options,
-      output,
+    if (!file.require || config.options[0][file.require]) {
+      const filename = path.basename(file.output)
+      const input = fs.readFileSync(path.join(process.cwd(), file.input), 'utf8')
+      const output = handlebars.compile(input)(view)
+      return {
+        path: realPath,
+        name: filename,
+        options: config.options,
+        output,
+      }
     }
-  })
+  }).filter(item => item)
 }
 
 const printOptions = options => Object.entries(...options).map(opt => opt.join(': '))
