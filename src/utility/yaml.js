@@ -1,35 +1,41 @@
-const fs = require('fs-extra')
-const yaml = require('js-yaml')
-const fileHandler = require('./fileHandler')
+import fs from 'fs-extra'
+import yaml from 'js-yaml'
+import chalk from 'chalk'
+import fileHandler from './fileHandler'
 
-const log = console.log
-const flagName = flag => {
-  return flag
+const { info } = console
+const flagName = flag =>
+  flag
     .replace('--', '')
     .replace('no-', '')
-    .replace('-', '');
-}
+    .replace('-', '')
 
-const collect = (val, memo) => {
-  if (Array.isArray(memo))return [Object.assign(...memo, { [val]: !memo[0][val] })]
-  else if (val) return [{ [val]: true }]
-}
+const collect = (val, memo) =>
+  Array.isArray(memo)
+    ? [Object.assign(...memo, { [val]: !memo[0][parseInt(String(val), 0)] })]
+    : [{ [val]: true }]
 
-module.exports.addFromYAML = program => {
+export const addFromYAML = program => {
   try {
-    const doc = yaml.safeLoad(fs.readFileSync('.gplate', 'utf8'))
+    const doc = yaml.safeLoad(fs.readFileSync('gplate.yaml', 'utf8'))
     doc.task.forEach(element => {
-      if (element.options) program.option(`${element.flags} [${element.options}]`, element.description, collect, element.default ? element.default : false)
+      if (element.options)
+        program.option(
+          `${element.flags} [${element.options}]`,
+          element.description,
+          collect,
+          element.default ? element.default : false,
+        )
       else program.option(element.flags, element.description)
     })
   } catch (e) {
-    log(e)
+    info(chalk.bgRed.black(`Couldn't find any gplate.yaml file.`))
   }
 }
 
-module.exports.checkOptionsFromYAML = program => {
+export const checkOptionsFromYAML = program => {
   try {
-    const doc = yaml.safeLoad(fs.readFileSync('.gplate', 'utf8'))
+    const doc = yaml.safeLoad(fs.readFileSync('gplate.yaml', 'utf8'))
     const options = program.opts()
     let longName
     let shortName
@@ -42,13 +48,17 @@ module.exports.checkOptionsFromYAML = program => {
       if (
         longName &&
         (options[longName] || options[String(longName).toUpperCase()]) &&
-        (program.rawArgs.includes(shortName) || program.rawArgs.includes(longName))
+        (program.rawArgs.includes(shortName) ||
+          program.rawArgs.includes(longName))
       ) {
-        const files = fileHandler.createFiles(element.files, { path: options.path,  options: Array.isArray(options[longName]) ? options[longName] : [] })
+        const files = fileHandler.createFiles(element.files, {
+          path: options.path,
+          options: Array.isArray(options[longName]) ? options[longName] : [],
+        })
         fileHandler.saveFiles(files)
       }
     })
   } catch (e) {
-    log(e)
+    info(e)
   }
 }
