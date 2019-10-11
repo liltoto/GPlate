@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf node_modules",
+    "clean": "rm -rf node_modules && rm -rf lib",
     "build": "npx babel ./src -d ./lib",
     "prepublishOnly": "npm run clean && npm install && npm run build",
     "publish-fix": "npm version patch && npm publish --access public ",
