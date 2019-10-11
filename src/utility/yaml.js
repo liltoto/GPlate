@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
 import yaml from 'js-yaml'
 import chalk from 'chalk'
-import fileHandler from './fileHandler'
+import { createFiles, saveFiles } from './fileHandler'
 
 const { info } = console
 const flagName = flag =>
@@ -51,11 +51,11 @@ export const checkOptionsFromYAML = program => {
         (program.rawArgs.includes(shortName) ||
           program.rawArgs.includes(longName))
       ) {
-        const files = fileHandler.createFiles(element.files, {
+        const files = createFiles(element.files, {
           path: options.path,
           options: Array.isArray(options[longName]) ? options[longName] : [],
         })
-        fileHandler.saveFiles(files)
+        saveFiles(files)
       }
     })
   } catch (e) {

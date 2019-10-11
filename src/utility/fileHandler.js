@@ -1,10 +1,10 @@
 import fs from 'fs-extra'
 import path from 'path'
-import handlebars from 'handlebars'
+import { registerHelper } from 'handlebars'
 import chalk from 'chalk'
 
 // eslint-disable-next-line func-names
-handlebars.registerHelper('operators', function(v1, operator, v2, options) {
+registerHelper('operators', function(v1, operator, v2, options) {
   switch (operator) {
     case '==':
       // eslint-disable-next-line eqeqeq
@@ -33,7 +33,7 @@ handlebars.registerHelper('operators', function(v1, operator, v2, options) {
   }
 })
 
-module.exports.createFiles = (files, config) => {
+export const createFiles = (files, config) => {
   const realPath = path.extname(config.path)
     ? path.dirname(config.path)
     : config.path
@@ -63,7 +63,7 @@ module.exports.createFiles = (files, config) => {
 const printOptions = options =>
   Object.entries(...options).map(opt => opt.join(': '))
 
-module.exports.saveFiles = files => {
+export const saveFiles = files => {
   console.info('Files created:')
   files.forEach(file => {
     fs.outputFileSync(path.join(file.path, file.name), file.output)
