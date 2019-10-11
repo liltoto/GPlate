@@ -1,0 +1,47 @@
+version: 1
+task:
+  - flags: -s --stateless
+    description: Will generate a stateless React component
+    files:
+      -
+        input: template/stateless.js
+        output: index.js
+      -
+        input: template/jest.js
+        output: index.test.js
+      -
+        input: template/storybook.js
+        output: index.stories.js
+      -
+        input: template/styles.js
+        output: styles.js
+        require: radium
+    options:
+      - radium
+      - flow
+    default:
+      - flow: true
+  - flags: -c --class
+    description: Will generate a React PureComponent
+    files:
+      -
+        input: template/class.js
+        output: index.js
+      -
+        input: template/jest.js
+        output: index.test.js
+      -
+        input: template/storybook.js
+        output: index.stories.js
+    options:
+      - radium
+      - flow
+    default:
+      - flow: true
+      - radium: false
+  - flags: -j --jest
+    description: Will generate a standard jest file
+    files:
+      -
+        input: template/jest.js
+        output: index.test.js
